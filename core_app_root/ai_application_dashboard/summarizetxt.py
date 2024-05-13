@@ -1,8 +1,8 @@
 from transformers import BartTokenizer, BartForConditionalGeneration
 
 # Load tokenizer and model
-tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')
-model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
+tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn',force_download=True)
+model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn',force_download=True)
 
 # Function to generate summary
 import random
