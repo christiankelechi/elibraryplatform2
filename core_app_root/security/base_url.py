@@ -1,1 +1,1 @@
-main_url='https://elibraryplatform.onrender.com/'
+main_url='https://kingsleyailibraryfinalproject.online/'
