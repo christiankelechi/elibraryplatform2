@@ -7,7 +7,7 @@ import base64
 import numpy as np
 from PIL import Image
 from io import BytesIO
-import face_recognition
+
 from rest_framework.response import Response
 from .forms import *
 # from core_app_root.security import authenticate
