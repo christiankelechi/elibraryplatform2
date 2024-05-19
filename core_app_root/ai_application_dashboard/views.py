@@ -148,7 +148,7 @@ def summarize(request):
         with open("extracted_book_text.json", "r") as f:
             pdf_text = f.read()
         
-        pdf_text=""
+    
         # summarizetxt.generate_summary(str(pdf_text))
         # Now you can do something with the extracted text
         # For example, you could render it in a template
