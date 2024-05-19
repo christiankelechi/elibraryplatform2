@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'core_app_root.security.auth',
     'core_app_root.ai_applications',
     'core_app_root.ai_application_dashboard',
+
     # third party app
     # 'django_two_factor_face_auth'
 ]
@@ -75,7 +76,7 @@ import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'core_app_root/templates'),os.path.join(BASE_DIR,'core_app_root/security/templates')],
+        'DIRS': [os.path.join(BASE_DIR,'core_app_root/templates'),os.path.join(BASE_DIR,'core_app_root/security/templates'),os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,12 +95,12 @@ WSGI_APPLICATION = 'elibraryplatform.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # import sys
 # if DEBUG is True:
 #     DATABASES = {
@@ -111,16 +112,16 @@ WSGI_APPLICATION = 'elibraryplatform.wsgi.application'
 # elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
 #     # if os.getenv("DATABASE_URL", None) is None:
 #     #     raise Exception("DATABASE_URL environment variable not defined")
-DATABASES = {
-'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'defaultdb',
-    'USER':'doadmin',
-    'PASSWORD':'AVNS_2VUPw3ccCs359cqiz4x',
-    'PORT':'25060',
-    'HOST':'kingsleyailibrary-do-user-16596059-0.c.db.ondigitalocean.com'
-}
-}
+# DATABASES = {
+# 'default': {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'NAME': 'defaultdb',
+#     'USER':'doadmin',
+#     'PASSWORD':'AVNS_2VUPw3ccCs359cqiz4x',
+#     'PORT':'25060',
+#     'HOST':'kingsleyailibrary-do-user-16596059-0.c.db.ondigitalocean.com'
+# }
+# }
 
 
 

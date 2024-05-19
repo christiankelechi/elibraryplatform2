@@ -68,6 +68,8 @@
  </div>
 </header>
 <main class="main-container">
+
+{% for all_book in book_list %}
 <div class="section-one">
 	<div class="inner-navigations">
         <div class="flex-item">
@@ -93,39 +95,53 @@
     <div class="flex-container-2">
         <div class="flex-item">
             <div class="img-container">
-                <img src="{% static './images/dashboard/book-covers/things-fall-apart.svg' %}" alt="things fall apart">
+                <img src="{{all_book.cover.url}}" alt="things fall apart">
             </div>
         </div>
         <div class="flex-item">
-            <h2>Things fall apart</h2>
+            <h2>{{all_book.title}}</h2>
             <h4><span class="author-title">Author:</span> <span class="author-name">Savi Stroutman</span></h4>
-            <p>Communication is one of the most fundamental forms of meaningful human interaction. Communication occurs at all times and in various manners. It can happen through spoken language or through gestures, facial expressions, and body movements. The phenomenon by which humans communicate using their body’s movements is called “body language”...</p>
+            <p>{{all_book.get_first_30_words}}</p>
             <div class="book-details">
                 <h4>Category: <span class="description"> Romance</span></h4>
                 <h4>Language: <span class="description"> English</span></h4>
                 <h4>ISBN: <span class="description">950974512</span></h4>
+		
+		<h4>Number of Times Read: <span class="description">{{all_book.number_of_times_read}}</span></h4>
+
+				
             </div>
         </div>
     </div>
+	<p></p>
 </div>
-<div class="section-two">
+
 <div class="extracted-chapters">
+
     <div class="chapter-container">
-        <h4>Chapter 1: Body Language and the Science Behind It</h4>
-        <p>
-        Communication is one of the most fundamental forms of meaningful human interaction. Communication occurs at all times and in various manners. It can happen through spoken language or through gestures, facial expressions, and body movements. The phenomenon by which humans communicate using their body’s movements is called “body language”. Body language can take many forms. It might be evidenced through the movement of a person’s eyes or the direction they are looking. It might also be seen through a person’s mannerisms such as being restless or jittery. It could even be revealed in a person’s posture or how they conduct themselves. Body language can even manifest in what a person decides to wear. Their clothes send out a message based on what color or design they are. A person can also change their body language by how they interact with their clothing and accessories, such as if they are spinning their wedding ring around their finger. We can all think of instances in our lives that have been affected by body language, whether it was ours or another person’s. We know that body language is a part of our daily lives and that it carries meaning. One of the most interesting things about it, however, is that it is backed by science. Of course, there are times when body language doesn’t seem very scientific at all. Personally, I’ve had many interactions in which people act out in a very interesting way. For instance, some people tend to cross their arms over their stomachs when talking about something embarrassing. Others will begin to take deep breaths when they hear something they don’t like. Then there is the fact that a certain gesture can mean something for different people and/or in different situations. For example, some people will bite their bottom lips when nervous, but others will do so when aroused. Sometimes tears indicate sadness, other times happiness, and still other times anger. Even a smile, one of the few facial expressions considered to be universal among humans, can mean happiness if genuine or just be a disguise with only subtle hints exposing which is real and which is fake. Nevertheless, at the root of it all, there is a scientific process behind body language. Given the fact that body language conveys meaning, it is essential that you begin to familiarize yourself with the various ways in which such meaning is transmitted to your interlocutors. Consequently, the science of body language becomes much more relevant in our daily lives when viewed in light of communication. That is why we are going to delve into research conducted on this subject. Such research provides greater insight into the scientific aspects of understanding people’s nature. A deeper understanding of body language will enable you to become more proficient in understanding the messages that others are communicating to you especially when such messages are subconscious or involuntary. This is what makes body language such an important aspect of human interaction. Since humans use spoken and written language as the main way in which they communicate, body language tends to get overlooked. However, this is nothing short of impractical as a lack of understanding of how body language and non-verbal communication as a whole enable communication leads to constant miscommunication. The core principles of reading people are rooted in the evolution of behavioral psychology. While psychology as a pure science deals with emotions and the human mind, behavioral psychology takes a deeper look at why humans act the way they do. Hence, gestures, mannerisms and body language and the way they convey meaning are a main concern for behavioral psychology. It should be noted that evolution does have a cross-cutting appeal in that it fits both animals and humans under the same umbrella. In this regard, many of the instinctive, gut-level emotions that animals feel are exactly the same as those that humans do. Let’s consider one very specific emotion: fear. When both animals and humans are faced with fear, they can react in one of three ways: fight, flight, or freeze. These reactions are very common in the animal kingdom. When an animal finds itself backed into a corner, it will attack out of sheer instinct. For example, a scared dog will automatically begin growling and barking. Likewise, animals such as meerkats have evolved a complex flight system in which they remain ever vigilant for predators. In fact, most animals will pick up on human body language and react accordingly. For example, pet dogs will pick up on feelings of fear and react aggressively as a result. As for humans, fear works in the same manner. For instance, schoolyard bullies are usually frightened kids who generally come from rough home environments. So, they lash out at other kids in hopes of finding a way of feeling better about themselves. Also, when a person is faced in a do-or-die situation, you may see them lock up, that is, they simply won’t be able to react in any way. They may simply remain silent and still. The flight response can be summed up by the phrase, “live to fight another day”. Indeed, it is an instinctive response to hightail out of a dangerous situation especially when you feel that there is no chance you can come out of it alive. As you can see, these are gut-level reactions that are produced by deep feelings. Of course, everyday interactions are not necessarily as dramatic as feeling like a cornered animal. But on the whole, people’s gestures and mannerisms tend to be the result of the way they feel expressed outwardly, in a subconscious manner. Consequently, it is important to consider that the study of body language, as a science, is part of the evolution of human communication, through behavior, much in the same way we consider the evolution of communication through written and spoken language. Furthermore, body language as a means of communication is also rooted in cultural anthropology as gestures, facial expressions and mannerisms are also relative to cultures and civilizations. As such, body language is as much the result of human behavior as it is a collective phenomenon. Nevertheless, it is important to consider body language throughout history as its evolution in history can provide us with insights into how scientists and philosophers have viewed body language from the perspective of their own research. Please bear in mind that while observations into human behavior date back thousands of years, the study of human behavior, as a science, is a rather new proposition. So, let’s take a deeper look at the history of the study of body language as it pertains to both observations and research conducted by respected philosophers throughout history.
+<form action="{% url 'dashboard_app:books' %}"  method="post">
+	{% csrf_token %}
+	       
+			<input type="submit" value="{{readorshrink}}" style="font-size: 30px;margin:20px;padding-left:20px;padding-right:20px" name="readorshrink">
+			
+			{% if read_mode  %}
+			<p>
+        
+				{{all_book.book_details}}
+				
+			</p>
+			{% else %}
+        <p hidden>
+        
+			{{all_book.book_details}}
+			
         </p>
-        <div class="pages">
-            <button class="page-1">1</button>
-            <button class="page-2">2</button>
-            <button class="page-3 active">3</button>
-            <button class="page-4">4</button>
-            <button class="page-5">5</button>
-            <button class="page-5">....</button>
-            <button class="page-12">12</button>
-        </div>
+		{% endif %}
+</form>
+        
     </div>
 </div>
+{% endfor %}
 <div class="more-books">
 	<div>
 		<h4>more for you</h4>

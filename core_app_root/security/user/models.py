@@ -73,6 +73,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # confirm_password=hashlib.sha256(str(confirm_password).encode()).hexdigest()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+    face_encoding = models.BinaryField(blank=True, null=True)
     objects = UserManager()
 
     def __str__(self):

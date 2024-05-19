@@ -1,20 +1,22 @@
+import gzip
 import threading
 import webbrowser
 from django.shortcuts import render
 import threading
 from django.core.files.storage import FileSystemStorage
 # Create your views here.
+
 from . import extract_txt
-from . import summarizetxt
+# from . import summarizetxt
 import ast
 from ast import literal_eval
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from bs4 import BeautifulSoup
 import requests
 from .forms import SearchForm
 from pycite.pycite import PyCite
-from . import models
+from core_app_root.ai_application_dashboard import models
 def dashboard(request):
     return render(request,"dashboard/dashboard.html")
 
@@ -26,6 +28,33 @@ url=""
 # def open_search_view_results(url):
     # webview.create_window('Search Results', url)
     # webview.start()
+
+
+def index(request, *args, **kwargs):
+    return render(request, 'index.html')
+class VideoCamera(object):
+    def __init__(self):
+        self.video = cv2.VideoCapture(0)
+        (self.grabbed, self.frame) = self.video.read()
+        threading.Thread(target=self.update, args=()).start()
+
+    def __del__(self):
+        self.video.release()
+
+    def get_frame(self):
+        image = self.frame
+        _, jpeg = cv2.imencode('.jpg', image)
+        return jpeg.tobytes()
+
+    def update(self):
+        while True:
+            (self.grabbed, self.frame) = self.video.read()
+
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield(b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 def search(request):
     if request.method == 'POST':
@@ -57,8 +86,24 @@ def fetch_search_results(query):
 
 
 def book(request):
-    list_of_books=models.Books.objects.all()
-    context={"book_list":list_of_books}
+    list_of_books=models.Book.objects.all()
+    context={"book_list":list_of_books,"read_mode":False,"readorshrink":"Read"}
+    if request.method=='POST':
+        if request.POST['readorshrink']=='Read':
+            read_mode=True
+            for read_book in list_of_books:
+                read_book.number_of_times_read+=1
+                read_book.save()
+                
+            context={"book_list":list_of_books,"read_mode":read_mode,"readorshrink":"Stop Reading"}
+                
+            # return render(request,'dashboard/books.html',context)
+        else:
+            read_mode=False
+            
+            context={"book_list":list_of_books,"read_mode":read_mode,"readorshrink":"Read"}
+        
+        
     return render(request,'dashboard/books.html',context)
 
 def save_page(request):
@@ -66,9 +111,19 @@ def save_page(request):
     return render(request,'dashboard/save.html',book_to_save)
 
 def recommendation(request):
-    books_recommended=['Things fall Apart','Chinua Achebe','Computer Science']
-    for recommended_books in books_recommended:
-        context={"books":recommended_books}
+    list_of_books=models.Book.objects.all()
+    context={"recommended_book_list":[],"read_mode":False,"readorshrink":"Read"}
+    
+    for read_book in list_of_books:
+        read_book.number_of_times_read
+        recommended_list=models.RecommendedBook.objects.all()
+        if int(read_book.number_of_times_read)>=5:
+            context={"recommended_book_list":recommended_list,"read_mode":False,"readorshrink":"Read"}
+            return render(request,'dashboard/recommendation.html',context)
+
+            
+            
+        
     context=context
     return render(request,'dashboard/recommendation.html',context)
 
@@ -93,7 +148,8 @@ def summarize(request):
         with open("extracted_book_text.json", "r") as f:
             pdf_text = f.read()
         
-        pdf_text=summarizetxt.generate_summary(str(pdf_text))
+        pdf_text=""
+        # summarizetxt.generate_summary(str(pdf_text))
         # Now you can do something with the extracted text
         # For example, you could render it in a template
         context={"upload_message":upload_message,"text":pdf_text}

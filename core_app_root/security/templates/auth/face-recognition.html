@@ -49,8 +49,8 @@
                 <ul class="list-menu">
                   <li><a href="./index.html">home</a></li>
                   <li><a href="/aboutus">about us</a></li>
-                  <li><a class="cta-btn" href="./signup.html">signup</a></li>
-                  <li><a class="cta-btn login" href="./login.html">login</a></li>
+                  <li><a class="cta-btn" href="{% url 'security:signup' %}">signup</a></li>
+                  <li><a class="cta-btn login" href="{% url 'security:login' %}">login</a></li>
                 </ul>
                 </ul>
                </nav>
@@ -59,18 +59,77 @@
           </section>
        </header>
      <main>
-      <button id="capture-btn">Capture Image</button>
+      
+      <button id="capture-btn" style="margin-left: 40px;">Capture Image</button>
+      <br>
+      <form action="">
 
+         <button type="submit" style="margin-left: 40px;">Login</button>
+         </form>
         <div class="face-reccogniton-container">
-            <div class="render-face" id='image-container'>
-               {% comment %} <div id="image-container"></div>
-                 </div> {% endcomment %}
-              </div>
-           </section>
-           </div>
-           
-            </div>
-            {% comment %} <p>Stay and looked directly at the camera</p> {% endcomment %}
+         <!DOCTYPE html>
+         <html>
+         <head>
+             <title>Capture Face</title>
+             <style>
+                 video {
+                     border: 1px solid black;
+                     display: block;
+                     margin-bottom: 10px;
+                 }
+                 canvas {
+                     display: none;
+                 }
+             </style>
+         </head>
+         <body>
+             <h2>Capture Your Face</h2>
+             <video id="video" width="640" height="480" autoplay></video>
+             <canvas id="canvas" width="640" height="480"></canvas>
+             <button id="captureButton">Capture Face</button>
+             
+             <script>
+                 // Access the user's webcam
+                 const video = document.getElementById('video');
+                 const canvas = document.getElementById('canvas');
+                 const captureButton = document.getElementById('captureButton');
+         
+                 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                     navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                         video.srcObject = stream;
+                         video.play();
+                     });
+                 }
+         
+                 // Capture a frame from the video feed
+                 captureButton.addEventListener('click', function() {
+                     const context = canvas.getContext('2d');
+                     context.drawImage(video, 0, 0, 640, 480);
+         
+                     const dataURL = canvas.toDataURL('image/png');
+         
+                     // Send the captured image to the server
+                     fetch('http://localhost:8000/auth/login/facial/', {
+                         method: 'POST',
+                         headers: {
+                             'Content-Type': 'application/json',
+                         },
+                         body: JSON.stringify({ image: dataURL })
+                     })
+                     .then(response => response.json())
+                     .then(data => {
+                         if (data.success) {
+                             window.location.href = '/login_with_face/';
+                         } else {
+                             alert('Face capture failed');
+                         }
+                     })
+                     .catch(error => console.error('Error:', error));
+                 });
+             </script>
+         </body>
+         </html>
+         
         </div>
      </main>
      <footer class="footer-container">
@@ -96,8 +155,8 @@
                         <hr>
                         <div class="address">
                            <address>
-                              <p><a href="tel:+234 9017912839">+234 90170912839</a></p>
-                              <p><a href="mailto:solobachi02@gmail.com">solobachi02@gmail.com</a></p>
+                              <p><a href="tel:+234 9017912839">+2690170912839</a></p>
+                              <p><a href="mailto:solobachi02@gmail.com">samzy@gmail.com</a></p>
                            </address>
                      </div>
                   </li>

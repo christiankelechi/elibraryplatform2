@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Capture Face</title>
+    <style>
+        video {
+            border: 1px solid black;
+            display: block;
+            margin-bottom: 10px;
+        }
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Capture Your Face</h2>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <button id="captureButton">Capture Face</button>
+    
+    <script>
+        // Access the user's webcam
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('captureButton');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.srcObject = stream;
+                video.play();
+            });
+        }
+
+        // Capture a frame from the video feed
+        captureButton.addEventListener('click', function() {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, 640, 480);
+
+            const dataURL = canvas.toDataURL('image/png');
+
+            // Send the captured image to the server
+            fetch('/capture_face/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ image: dataURL })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/login_with_face/';
+                } else {
+                    alert('Face capture failed');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

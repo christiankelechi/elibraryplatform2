@@ -1,6 +1,13 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render,redirect
 import requests
+from django.shortcuts import render
+from django.http import JsonResponse
+import base64
+import numpy as np
+from PIL import Image
+from io import BytesIO
+import face_recognition
 from rest_framework.response import Response
 from .forms import *
 # from core_app_root.security import authenticate
@@ -73,7 +80,9 @@ def signup(request):
                 print(singup_response)
                 # context="Signup Successful"
                 # return render(g)
-                return redirect('security:login')
+                # return redirect('security:login')
+                return redirect('core_app_root:capture_face', user_id=request.user.id)
+                
             
             else:
                 context = {"signupErrorMessages":["1. Consider checking if your password is upto 8 characters or if username, email already exists in the database , and also check if you entered and confirmed your password "]}
@@ -107,20 +116,29 @@ def register(request):
     return render(request, 'django_two_factor_face_auth/signup.html', context)
 
 
+
+
+
+
 def face_login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
+        try:
+            data = request.json()
+            image_data = data['image']
+            format, imgstr = image_data.split(';base64,')
+            image = Image.open(BytesIO(base64.b64decode(imgstr)))
+            image = np.array(image)
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            face_image = prepare_image(form.cleaned_data['image'])
+            face_encodings = face_recognition.face_encodings(image)
+            if face_encodings:
+                user = request.user
+                
+                user.face_encoding(face_encodings[0])
+                user.save()
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'error': 'No face detected'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
-            
-            return redirect('security:login')
-        
-    else:
-        form = AuthenticationForm()
-
-    context = {'form': form}
-    return render(request, 'auth/face-recognition.html', context)
+    return render(request, 'auth/face-recognition.html')

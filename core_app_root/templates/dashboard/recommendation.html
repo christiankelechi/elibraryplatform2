@@ -108,87 +108,26 @@
         <button class="btn-item">Weekly Ready</button>
         <button class="btn-item">Occasional Reader</button>
     </div>
+
 	<div class="books-card-section grid-container-5">
+{% for all_book in recommended_book_list %}
+
 		<figure class="book-card">
 			<div class="top-section">
 				<div class="img-container">
-					<img src="{% static './images/dashboard/book-covers/cover-1.svg' %}" alt="book cover 1">
+					<img src="{{all_book.cover.url}}" alt="book cover 1">
 				</div>
 			</div>
-			<div class="bottom-section">
-				<h5 class="title">things fall apart</h5>
-				<p class="author">chinua achebe</p>
-			</div>
+			
+		
 			<span class="love-icon">
 				<div class="img-container">
-					<img src="{% static './images/dashboard/icons/love-icon.svg' %}" alt="love">
+					<img src="{all_book.cover.url}}" alt="book">
 				</div>
 			</span>
 		</figure>
-		<figure class="book-card">
-			<div class="top-section">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/book-covers/cover-2.svg' %}" alt="book cover 1">
-				</div>
-			</div>
-			<div class="bottom-section">
-				<h5 class="title">things fall apart</h5>
-				<p class="author">chinua achebe</p>
-			</div>
-			<span class="love-icon">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/icons/love-icon.svg' %}" alt="love">
-				</div>
-			</span>
-		</figure>
-		<figure class="book-card">
-			<div class="top-section">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/book-covers/cover-3.svg' %}" alt="book cover 1">
-				</div>
-			</div>
-			<div class="bottom-section">
-				<h5 class="title">things fall apart</h5>
-				<p class="author">chinua achebe</p>
-			</div>
-			<span class="love-icon">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/icons/love-icon.svg' %}" alt="love">
-				</div>
-			</span>
-		</figure>
-		<figure class="book-card">
-			<div class="top-section">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/book-covers/cover-4.svg' %}" alt="book cover 1">
-				</div>
-			</div>
-			<div class="bottom-section">
-				<h5 class="title">things fall apart</h5>
-				<p class="author">chinua achebe</p>
-			</div>
-			<span class="love-icon">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/icons/love-icon.svg' %}" alt="love">
-				</div>
-			</span>
-		</figure>
-		<figure class="book-card">
-			<div class="top-section">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/book-covers/cover-5.svg' %}" alt="book cover 1">
-				</div>
-			</div>
-			<div class="bottom-section">
-				<h5 class="title">things fall apart</h5>
-				<p class="author">chinua achebe</p>
-			</div>
-			<span class="love-icon">
-				<div class="img-container">
-					<img src="{% static './images/dashboard/icons/love-icon.svg' %}" alt="love">
-				</div>
-			</span>
-		</figure>
+		{% endfor %}
+		
 	</div>
 </div>
 <div class="reading-recommendations">
