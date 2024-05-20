@@ -7,7 +7,7 @@ from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 from . import extract_txt
-# from . import summarizetxt
+from . import summarizetxt
 import ast
 from ast import literal_eval
 from django.shortcuts import render
