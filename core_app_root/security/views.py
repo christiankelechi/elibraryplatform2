@@ -80,8 +80,8 @@ def signup(request):
                 print(singup_response)
                 # context="Signup Successful"
                 # return render(g)
-                # return redirect('security:login')
-                return redirect('core_app_root:capture_face', user_id=request.user.id)
+                return redirect('security:login')
+                # return redirect('core_app_root:capture_face', user_id=request.user.id)
                 
             
             else:
