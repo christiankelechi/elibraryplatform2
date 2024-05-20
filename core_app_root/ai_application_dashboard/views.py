@@ -149,7 +149,7 @@ def summarize(request):
             pdf_text = f.read()
         
     
-        # summarizetxt.generate_summary(str(pdf_text))
+        pdf_text=summarizetxt.generate_summary(str(pdf_text))
         # Now you can do something with the extracted text
         # For example, you could render it in a template
         context={"upload_message":upload_message,"text":pdf_text}
