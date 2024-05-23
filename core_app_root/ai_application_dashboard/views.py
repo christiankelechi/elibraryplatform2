@@ -7,7 +7,7 @@ from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 from . import extract_txt
-from . import summarizetxt
+# from . import summarizetxt
 import ast
 from ast import literal_eval
 from django.shortcuts import render
@@ -142,14 +142,14 @@ def summarize(request):
         file_path = fs.path(filename)
         
         # Process the uploaded PDF file
-        extract_txt.pdf_to_json(pdf_path=file_path, json_file="extracted_book_text.json")
+        # extract_txt.pdf_to_json(pdf_path=file_path, json_file="extracted_book_text.json")
         
         # Read the extracted text from the JSON file
         with open("extracted_book_text.json", "r") as f:
             pdf_text = f.read()
         
     
-        pdf_text=summarizetxt.generate_summary(str(pdf_text))
+        # pdf_text=summarizetxt.generate_summary(str(pdf_text))
         # Now you can do something with the extracted text
         # For example, you could render it in a template
         context={"upload_message":upload_message,"text":pdf_text}
